@@ -3,8 +3,6 @@ require 'securerandom'
 
 module OpenBadges
   class Assertion < ActiveRecord::Base
-    #delegate :url_helpers, to: 'OpenBadges::Engine.routes'
-
     belongs_to :badge
 
     validates :badge_id, presence: true
@@ -22,9 +20,9 @@ module OpenBadges
     private
     def assign_defaults
       if new_record?
-        self.identity ||= "sha256$"
-        self.identity_type = 'email'
+        self.identity = 'sha256$'
         self.identity_hashed = true
+        self.identity_type = 'email'
         self.identity_salt = SecureRandom.urlsafe_base64(16)
 
         self.verification_type = 'hosted'

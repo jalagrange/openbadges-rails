@@ -8,7 +8,7 @@ module OpenBadges
     def as_json(options = nil)
       super(
         :only => [:url, :name, :image, :email, :description]
-      ).reject{ |key, value| value.empty? }
+      ).reject{ |key, value| value.nil? || value.empty? }
     end
   end
 end

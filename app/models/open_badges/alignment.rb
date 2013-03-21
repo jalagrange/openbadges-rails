@@ -10,9 +10,9 @@ module OpenBadges
 
     public
     def as_json(options = nil)
-      super(
-        :only => [:url, :name, :description]
-      ).reject{ |key, value| value.empty? }
+      json = super(:only => [:url, :name])
+      json[:description] = self.description unless self.description.empty?
+      json
     end
   end
 end
