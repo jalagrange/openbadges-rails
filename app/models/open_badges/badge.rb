@@ -7,8 +7,8 @@ module OpenBadges
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
-    validates :name, :image, presence: true
     validates :name, uniqueness: true
+    validates :name, :image, presence: true
     validates :image, allow_blank: true, format: {
       with: %r{\.(gif|jpe?g|png)$}i,
       message: 'must be a ULR for GIF, JPG, JPEG or PNG images'
