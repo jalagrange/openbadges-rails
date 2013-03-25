@@ -4,7 +4,6 @@ require 'select2-rails'
 require 'will_paginate'
 require 'bootstrap-sass'
 
-
 module OpenBadges
   class Engine < ::Rails::Engine
     isolate_namespace OpenBadges

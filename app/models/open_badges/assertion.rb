@@ -15,6 +15,12 @@ module OpenBadges
     attr_accessible :identity, :identity_hashed, :identity_salt, :identity_type
     attr_accessible :verification_type
 
+    # class << self
+    #   def associate_user_class(user_class)
+    #     belongs_to :user, :class_name => user_class.to_s, :foreign_key => 'user_id'
+    #   end
+    # end
+
     after_initialize :assign_defaults
 
     private
