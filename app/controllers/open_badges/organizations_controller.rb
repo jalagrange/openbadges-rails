@@ -2,8 +2,16 @@ require_dependency "open_badges/application_controller"
 
 module OpenBadges
   class OrganizationsController < ApplicationController
+    load_and_authorize_resource :class => 'OpenBadges::Organization', :except => [:json]
 
-    #before_filter :authenticate_user!
+    # GET /organization.json
+    def json
+      @organization = Organization.first || Organization.new
+
+      respond_to do |format|
+       format.json { render json: @organization }
+      end
+    end
 
     # GET /organization
     def show

@@ -5,6 +5,8 @@ require 'securerandom'
 
 module OpenBadges
   class AssertionsController < ApplicationController
+    load_and_authorize_resource :class => 'OpenBadges::Assertion', :except => [:json]
+
     # GET /assertions
     def index
       @assertions = Assertion.all

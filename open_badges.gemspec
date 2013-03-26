@@ -16,10 +16,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE.md", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
-  #s.add_dependency 'rails', '~> 3.2.12'
   s.add_dependency 'rails', '~> 3.0'
-  #s.add_dependency 'devise', '~> 2.2.3'
-  s.add_dependency 'devise', '~> 2.1'
+  s.add_dependency 'cancan', '~> 1.6'
   s.add_dependency 'paperclip', '~> 3.0'
   s.add_dependency 'chunky_png', '~> 1.2.7'
   s.add_dependency 'will_paginate', '~> 3.0'

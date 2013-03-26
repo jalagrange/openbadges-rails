@@ -20,7 +20,7 @@ module OpenBadges
       #image.to_blob # no save
       #image.save('file.png')
 
-	  user_class.find(options[:id])
+	  #user_class.find(options[:id])
   	end
 
   end
