@@ -1,15 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  url: MyString
-  name: MyString
-  image: MyString
-  email: MyString
-  description: MyString
-
-two:
-  url: MyString
-  name: MyString
-  image: MyString
-  email: MyString
-  description: MyString
+smart:
+  url: http://smart-academy.com
+  name: Smart Academy
+  image: http://smart-academy.png
+  email: smart-academy@gmail.com
+  description: Provide Smart Courses

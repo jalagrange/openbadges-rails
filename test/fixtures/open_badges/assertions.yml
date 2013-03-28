@@ -1,27 +1,14 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+androidAssertion:
+  id: 1
+  user_id: 1
   badge_id: 1
-  issued_on: 2013-03-19 08:26:45
-  image: MyString
-  evidence: MyString
-  expires: 2013-03-19 08:26:45
-  identity: MyText
-  identity_type: MyString
-  identity_hashed: false
-  identity_salt: MyString
-  verification_type: MyString
-  verification_url: MyString
-
-two:
-  badge_id: 1
-  issued_on: 2013-03-19 08:26:45
-  image: MyString
-  evidence: MyString
-  expires: 2013-03-19 08:26:45
-  identity: MyText
-  identity_type: MyString
-  identity_hashed: false
-  identity_salt: MyString
-  verification_type: MyString
-  verification_url: MyString
+  image: http://android-badge.png
+  identity: sha256$
+  identity_type: email
+  identity_salt: ABC
+  identity_hashed: true
+  verification_type: hosted
+  evidence: Some Evidence
+  expires: 2001-01-01 01:01:01

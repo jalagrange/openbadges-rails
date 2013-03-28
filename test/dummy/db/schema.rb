@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20130319002645) do
   end
 
   create_table "open_badges_assertions", :force => true do |t|
+    t.integer  "user_id"
     t.integer  "badge_id"
     t.string   "image"
     t.string   "evidence"

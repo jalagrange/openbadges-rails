@@ -2,15 +2,26 @@ require 'test_helper'
 
 module OpenBadges
   class OrganizationsControllerTest < ActionController::TestCase
-    # setup do
-    #   @organization = organizations(:one)
-    # end
+    setup do
+      @organization = open_badges_organizations(:smart)
+    end
   
     # test "should get index" do
     #   get :index
     #   assert_response :success
     #   assert_not_nil assigns(:organizations)
     # end
+
+    test "should show organization json" do
+      get :show, id: @badge, :format => "json"
+      assert_response :success
+
+      json = JSON.parse response.body
+      assert_equal json["url"], "http://smart-academy.com"
+      assert_equal json["name"], "Smart Academy"
+      assert_equal json["email"], "smart-academy@gmail.com"
+      assert_equal json["description"], "Provide Smart Courses"
+    end
   
     # test "should get new" do
     #   get :new
