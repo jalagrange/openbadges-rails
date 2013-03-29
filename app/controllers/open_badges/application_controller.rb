@@ -6,7 +6,7 @@ module OpenBadges
   	end
 
   	def current_ability
-      OpenBadges::Ability.new(current_user)
+      OpenBadges::Ability.new(self.send(OpenBadges.current_user))
     end
 
   	# GET /

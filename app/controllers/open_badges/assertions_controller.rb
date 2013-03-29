@@ -41,7 +41,6 @@ module OpenBadges
   
       respond_to do |format|
         format.html # new.html.erb
-        format.json { render json: @assertion }
       end
     end
   
@@ -67,7 +66,6 @@ module OpenBadges
   
       respond_to do |format|
         if @assertion.save
-
           format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully created.' } }
         else
           format.html { render action: "new" }

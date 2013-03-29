@@ -5,10 +5,11 @@ module OpenBadges
     def initialize(user)
       user ||= OpenBadges.user_class.new
 
-      if user.is_admin?
+      if user.send(OpenBadges.is_openbadges_admin)
         can :manage, :all
       else
-        can :show, OpenBadges::Badge
+        can :json, OpenBadges::Badge
+        can :json, OpenBadges::Assertion
         can :json, OpenBadges::Organization
       end
     end

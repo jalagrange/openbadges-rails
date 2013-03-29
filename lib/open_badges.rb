@@ -6,6 +6,12 @@ module OpenBadges
 	mattr_accessor :user_class
   	@@user_class = nil
 
+	mattr_accessor :current_user
+  	@@current_user = ''
+
+  	mattr_accessor :is_openbadges_admin
+  	@@is_openbadges_admin = ''
+
 	# setup user config
 	def setup
 	  yield self
