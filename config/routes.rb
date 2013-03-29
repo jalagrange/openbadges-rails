@@ -1,17 +1,18 @@
 OpenBadges::Engine.routes.draw do
-  resources :assertions
 
   root :to => "application#show"
+
+  resources :tags
+
+  resources :badges
+
+  resources :alignments
+
+  resources :assertions
 
   resources :organizations, :only => []
   get "organization" => "organizations#show"
   post "organization" => "organizations#create"
-
-  resources :badges
-
-  resources :tags
-
-  resources :alignments
 
   # public accessible json
   #get "public/badges/" => "badges#json"

@@ -70,10 +70,16 @@
     </div>
 
     <div class="container">
-      <% flash.each do |key, value| %>
+      <% flash.each do |key, errors| %>
         <div class="<%= bootstrap_flash(key) %>">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong><%= value %></strong>
+            <% if !errors.kind_of?(Array) %>
+              <% errors = [errors] %>
+            <% end %>
+
+            <% errors.each do |error| %>
+              <strong><%= error %></strong><br>
+            <% end %>
         </div>
       <% end %>
 

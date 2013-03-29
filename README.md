@@ -33,10 +33,6 @@ config.default_url_options = { :host => 'localhost:3000' }
     openbadges-rails> rake db:seed
 
 
-## Add an administrator for Open Badges admin interface
-    openbadges-rails> rake app:add_admin[<email>,<password>] // Without spaces
-
-
 ## Running tests
     openbadges-rails> rake test              // Run all tests
     openbadges-rails> rake app:test:units    // Run unit tests only

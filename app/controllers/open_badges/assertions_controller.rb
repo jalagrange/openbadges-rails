@@ -24,6 +24,15 @@ module OpenBadges
         format.json { render json: @assertion }
       end
     end
+
+    # GET /assertions/1.json
+    def json
+      @assertion = Assertion.find(params[:id])
+  
+      respond_to do |format|
+        format.json { render json: @assertion }
+      end
+    end
   
     # GET /assertions/new
     # GET /assertions/new.json

@@ -49,7 +49,19 @@ module OpenBadges
         if @badge.save
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully created.' } }
         else
-          format.html { render action: "new" }
+          @errors = []
+          @badge.errors.messages.each do |key, value|
+            @errors += value.map{ |error|
+              name = key.to_s
+              name[0] = name[0].capitalize
+              name + " " + error
+            }
+          end
+
+          format.html {
+            flash[:error] = @errors
+            render action: "new"
+          }
         end
       end
     end
