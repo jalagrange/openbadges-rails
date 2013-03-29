@@ -33,19 +33,19 @@ module OpenBadges
       assert_equal json["badge"], "http://localhost:3000/open_badges/badges/1.json"
 
       recipient = json["recipient"]
-      assert_not_nil recipient
-      assert_equal recipient["identity"], "sha256$"
-      assert_equal recipient["type"], "email"
-      assert_equal recipient["salt"], "ABC"
-      assert_equal recipient["hashed"], true
+      assert_not_nil recipient, "Json not found"
+      assert_equal recipient["identity"], "sha256$", "Identity invalid"
+      assert_equal recipient["type"], "email", "Identity type invalid"
+      assert_equal recipient["salt"], "ABC", "Identity salt invalid"
+      assert_equal recipient["hashed"], true, "Identity hashed invalid"
 
       recipient = json["verify"]
-      assert_not_nil recipient
-      assert_equal recipient["url"], "http://localhost:3000/open_badges/assertions/1.json"
-      assert_equal recipient["type"], "hosted"
+      assert_not_nil recipient, "Recipient invalid"
+      assert_equal recipient["url"], "http://localhost:3000/open_badges/assertions/1.json", "Recipient url invalid"
+      assert_equal recipient["type"], "hosted", "Recipient type invalid"
 
-      assert_equal json["evidence"], "Some Evidence"
-      assert_equal json["expires"], DateTime.parse("2001-01-01 01:01:01").to_i
+      assert_equal json["evidence"], "Some Evidence", "Evidence invalid"
+      assert_equal json["expires"], DateTime.parse("2001-01-01 01:01:01").to_i, "Expires invalid"
     end
   
     # test "should show assertion" do

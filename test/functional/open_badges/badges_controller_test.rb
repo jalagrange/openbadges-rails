@@ -35,18 +35,19 @@ module OpenBadges
       assert_response :success
 
       json = JSON.parse response.body
-      assert_equal json["name"], "Android"
-      assert_equal json["image"], "android.jpg"
-      assert_equal json["description"], %{A Linux-based operating system designed primarily for touchscreen mobile devices such as smartphones and tablet computers}
-      
+      assert_equal json["name"], "Android", "Name invalid"
+      assert_equal json["image"], "android.jpg", "Image invalid"
+      assert_not_nil json["description"], "Description invalid"
+
       tags = json["tags"]
-      assert_not_nil tags
-      assert_equal tags.length, 3
+      assert_not_nil tags , "Tags invalid"
+      assert_equal tags.length, 3, "Tags length invalid"
 
       alignments = json["alignment"];
-      assert_not_nil tags
-      assert_equal tags.length, 3
-      assert_equal json["issuer"], "http://localhost:3000/open_badges/organization.json"
+      assert_not_nil alignments, "Alignments invalid"
+      assert_equal alignments.length, 1, "Alignments length invalid"
+
+      assert_equal json["issuer"], "http://localhost:3000/open_badges/organization.json", "Issuer invalid"
     end
   
     # test "should get edit" do
