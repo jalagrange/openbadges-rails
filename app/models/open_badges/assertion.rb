@@ -11,6 +11,7 @@ module OpenBadges
 
     validates :badge, :presence => { message: "does not exists" }
     
+    attr_accessible :user_id
     attr_accessible :badge_id, :evidence, :expires, :image
     attr_accessible :identity, :identity_hashed, :identity_salt, :identity_type
     attr_accessible :verification_type
