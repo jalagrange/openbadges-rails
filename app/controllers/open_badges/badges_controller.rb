@@ -62,8 +62,6 @@ module OpenBadges
 
       respond_to do |format|
         if @badge.update_attributes(params[:badge])
-
-          ::Rails.logger.info(@badge.inspect)
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully updated.' } }
         else
           format.html {
@@ -75,7 +73,6 @@ module OpenBadges
     end
   
     # DELETE /badges/1
-    # DELETE /badges/1.json
     def destroy
       @badge = Badge.find(params[:id])
       @badge.destroy
