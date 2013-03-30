@@ -7,12 +7,16 @@ module OpenBadges
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
+    has_attached_file :image
+    validates :image, attachment_presence: true
+
     validates :name, uniqueness: true
-    validates :name, :image, presence: true
-    validates :image, allow_blank: true, format: {
-      with: %r{\.(gif|jpe?g|png)$}i,
-      message: 'must be a ULR for GIF, JPG, JPEG or PNG images'
-    }
+    validates :name, presence: true
+    # validates :name, :image, presence: true
+    # validates :image, allow_blank: true, format: {
+    #   with: %r{\.(gif|jpe?g|png)$}i,
+    #   message: 'must be a ULR for GIF, JPG, JPEG or PNG images'
+    # }
 
     # Tag List
     attr_writer :tag_list

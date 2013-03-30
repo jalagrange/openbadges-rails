@@ -1,22 +1,23 @@
-<%= form_for(@badge) do |f| %>
-
+<%= form_for @badge, :html => { :multipart => true } do |f| %>
   <% if defined?(title) && title.is_a?(String) && !title.empty? %>
     <legend><%= title %></legend>
   <% end %>
+
+  <% if @badge.errors[:image].any? %>
+    <div class="alert alert-error">Badge image is missing!</div>
+  <% end %>
+
+  <div class= "badge-edit-image">
+    <%= f.label :image %>
+    <%= image_tag @badge.image.url, class: 'badge-image'%>
+    <%= f.file_field :image %>
+  </div>
 
   <div class="field">
     <%= f.label :name %>
     <%= f.text_field :name, :class => "input-xlarge", :required => "" %>
     <span class="help-block">
       The name of the achievement.
-    </span>
-  </div>
-
-  <div class="field">
-    <%= f.label :image %>
-    <%= f.url_field :image, :class => "input-xlarge", :required => "" %>
-    <span class="help-block">
-      URL or <a href="http://en.wikipedia.org/wiki/Data_URI_scheme">Data URL</a> of an image representing the achievement.
     </span>
   </div>
 
