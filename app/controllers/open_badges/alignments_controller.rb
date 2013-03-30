@@ -14,7 +14,6 @@ module OpenBadges
     end
   
     # GET /alignments/new
-    # GET /alignments/new.json
     def new
       @alignment = Alignment.new
   
@@ -37,7 +36,7 @@ module OpenBadges
         if @alignment.save
           format.html { redirect_to alignments_url, :flash => { :success => 'Alignment was successfully created.' } }
         else
-          format.html { redirect_to :back, :flash => { :error => @alignment.errors.full_messages.first } }
+          format.html { redirect_to :back, :flash => { :error => @alignment.errors.full_messages } }
         end
       end
     end
@@ -51,7 +50,10 @@ module OpenBadges
         if @alignment.update_attributes(params[:alignment])
           format.html { redirect_to alignments_url, notice: 'Alignment was successfully updated.' }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @alignment.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end

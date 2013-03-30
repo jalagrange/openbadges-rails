@@ -68,7 +68,10 @@ module OpenBadges
         if @assertion.save
           format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully created.' } }
         else
-          format.html { render action: "new" }
+          format.html {
+            flash[:error] = @assertion.errors.full_messages
+            render action: "new"
+          }
         end
       end
     end
@@ -81,7 +84,10 @@ module OpenBadges
         if @assertion.update_attributes(params[:assertion])
           format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully updated.' } }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @assertion.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end

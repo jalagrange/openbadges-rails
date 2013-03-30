@@ -7,8 +7,7 @@ module OpenBadges
     # GET /badges
     # GET /badges.json
     def index
-      @badges = Badge.paginate(:page => params[:page],
-        :per_page => RESULTS_PER_PAGE)
+      @badges = Badge.paginate(:page => params[:page], :per_page => RESULTS_PER_PAGE)
   
       respond_to do |format|
         format.html # index.html.erb
@@ -49,17 +48,8 @@ module OpenBadges
         if @badge.save
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully created.' } }
         else
-          @errors = []
-          @badge.errors.messages.each do |key, value|
-            @errors += value.map{ |error|
-              name = key.to_s
-              name[0] = name[0].capitalize
-              name + " " + error
-            }
-          end
-
           format.html {
-            flash[:error] = @errors
+            flash[:error] = @badge.errors.full_messages
             render action: "new"
           }
         end
@@ -72,9 +62,14 @@ module OpenBadges
 
       respond_to do |format|
         if @badge.update_attributes(params[:badge])
+
+          ::Rails.logger.info(@badge.inspect)
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully updated.' } }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @badge.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end

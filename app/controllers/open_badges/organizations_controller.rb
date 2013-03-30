@@ -31,7 +31,7 @@ module OpenBadges
         if @organization.update_attributes(params[:organization])
           format.html { redirect_to :back, :flash => { :success => 'Organization was successfully updated.' } }
         else
-          format.html { redirect_to :back, :flash => { :error => 'Organization was not successfully updated.' } }
+          format.html { redirect_to :back, :flash => { :error => @organization.errors.full_messages } }
         end
       end
     end
