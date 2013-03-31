@@ -20,22 +20,26 @@ module OpenBadges
                 image: image_url)
     end
 
-    test "badge image url validity" do
-      ok_url = %w{ windows.gif windows.jpg windows.png windows.jpeg WINDOWS.JPG
-        WINDOWS.pNg http://i/am/not/sad/wInDoWs.Gif }
-      bad_url = %w{ windows.doc windows.gif/more windows.gif.more windows.pngg}
+    test "paperclip attachment and removal" do
+      missing_path = "/images/original/missing.png"
+      image_path = File.join(Rails.root, "/app/assets/Smiley_face.jpg")
 
-      ok_url.each do |name|
-        assert new_badge(name).valid?, "#{name} shouldn't be invalid"
-      end
-      bad_url.each do |name|
-        assert new_badge(name).invalid?, "#{name} shouldn't be valid"
-      end
+      # Start by asserting image is empty
+      assert_equal missing_path, @android_badge.image.url(), "Image not empty"
+
+      # Attach an image
+      image = File.open(image_path)
+      @android_badge.update_attributes(:image => image)
+
+      # Assert image is no longer missing
+      assert_not_equal missing_path, @android_badge.image.url(), "Image file not attached"
+
+      # Remove uploaded file
+      @android_badge.destroy
     end
 
     test "badge name must be unique" do
-      badge = Badge.new(name: @android_badge.name,
-                        image: 'jellybean.png')
+      badge = Badge.new(name: @android_badge.name)
       assert !badge.save
       assert_equal I18n.translate('activerecord.errors.messages.taken'),
                    badge.errors[:name].join('; ')

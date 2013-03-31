@@ -17,10 +17,10 @@ module OpenBadges
       assert_response :success
 
       json = JSON.parse response.body
-      assert_equal json["url"], "http://smart-academy.com", "Url Invalid"
-      assert_equal json["name"], "Smart Academy", "Name Invalid"
-      assert_equal json["email"], "smart-academy@gmail.com", "Email Invalid"
-      assert_equal json["description"], "Provide Smart Courses", "Description Invalid"
+      assert_equal "http://smart-academy.com", json["url"], "Url Invalid"
+      assert_equal "Smart Academy", json["name"], "Name Invalid"
+      assert_equal "smart-academy@gmail.com", json["email"], "Email Invalid"
+      assert_equal "Provide Smart Courses", json["description"], "Description Invalid"
     end
   
     # test "should get new" do

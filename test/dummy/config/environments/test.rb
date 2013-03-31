@@ -35,3 +35,7 @@ Dummy::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 end
+
+Paperclip::Attachment.default_options.merge!({
+  :path => "tmp/test/:class/:attachment/:id_:filename"
+})

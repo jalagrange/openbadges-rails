@@ -4,28 +4,33 @@ OpenBadges::BadgeTag.delete_all
 OpenBadges::Alignment.delete_all
 OpenBadges::BadgeAlignment.delete_all
 
+image_path = File.join(Rails.root, '/app/assets')
+
 OpenBadges::Badge.create(
   id: 1,
   name: 'Teleport',
-  # image: 'http://localhost:3000/assets/teleport.png',
+  image: File.open(File.join(image_path, 'teleport.png')),
+  criteria: 'http://criteria.teleport.com',
   description: 'Manipulate space time to instantaneously travel from one location to another')
 OpenBadges::Badge.create(
   id: 2,
   name: 'Ice Wall',
-  # image: 'http://localhost:3000/assets/ice_wall.png',
+  image: File.open(File.join(image_path, 'ice_wall.png')),
+  criteria: 'http://criteria.ice_wall.com',
   description: 'Concentrate water vapour into a wall like structure and rapidly decrease its temperature')
 OpenBadges::Badge.create(
   id: 3,
   name: 'Fireball',
-  # image: 'http://localhost:3000/assets/fireball.png',
+  image: File.open(File.join(image_path, 'fireball.png')),
+  criteria: 'http://criteria.fireball.com',
   description: 'Vibrate gas molecules violently within a confined space to create a ball of fire')
 
-100.times do |i|
-  OpenBadges::Badge.create(
-  name: "Teleport - #{i}",
-  # image: 'http://localhost:3000/assets/teleport.png',
-  description: 'Manipulate space time to instantaneously travel from one location to another')
-end
+# 100.times do |i|
+#   OpenBadges::Badge.create(
+#   name: "Teleport - #{i}",
+#   # image: 'http://localhost:3000/assets/teleport.png',
+#   description: 'Manipulate space time to instantaneously travel from one location to another')
+# end
 
 OpenBadges::Tag.create(
   id: 1,

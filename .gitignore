@@ -6,6 +6,8 @@ test/dummy/db/*.sqlite3
 test/dummy/log/*.log
 test/dummy/tmp/
 test/dummy/.sass-cache
+test/dummy/public/open_badges
+tmp/test
 
 # OS generated files #
 ######################

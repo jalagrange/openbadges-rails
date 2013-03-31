@@ -7,16 +7,11 @@ module OpenBadges
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
-    has_attached_file :image
+    has_attached_file :image, :url => "/:class/:attachment/:id_:filename"
     validates :image, attachment_presence: true
 
     validates :name, uniqueness: true
     validates :name, presence: true
-    # validates :name, :image, presence: true
-    # validates :image, allow_blank: true, format: {
-    #   with: %r{\.(gif|jpe?g|png)$}i,
-    #   message: 'must be a ULR for GIF, JPG, JPEG or PNG images'
-    # }
 
     # Tag List
     attr_writer :tag_list
@@ -55,6 +50,11 @@ module OpenBadges
     end
 
     public
+    def image_url
+      Rails.application.routes.default_url_options[:host] + image.url
+    end
+
+    public
     def url
       OpenBadges::Engine.routes.url_helpers.badge_url({
         :id => self.id,
@@ -67,8 +67,11 @@ module OpenBadges
     def as_json(options = nil)
       json = super(
         :methods => [:badge_tags, :badge_alignments],
-        :only => [:name, :image, :criteria, :badge_tags, :badge_alignments, :description]
+        :only => [:name, :criteria, :badge_tags, :badge_alignments, :description]
       ).reject{ |key, value| value.nil? || value.empty? }
+      json.merge!({
+        :image => self.image_url
+        })
       json['tags'] = json.delete(:badge_tags) unless json[:badge_tags].nil?
       json['alignment'] = json.delete(:badge_alignments) unless json[:badge_alignments].nil?
       json['issuer'] = OpenBadges::Engine.routes.url_helpers.organization_url({

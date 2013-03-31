@@ -3,13 +3,13 @@
 android:
   id: 1
   name: Android
-  image: android.jpg
+  criteria: http://criteria.android.com
   description: A Linux-based operating system designed primarily for 
     touchscreen mobile devices such as smartphones and tablet computers
 
 ios:
   id: 2
   name: iOS
-  image: apple.png
+  criteria: http://criteria.ios.com
   description: iOS is a mobile operating system developed and distributed by
     Apple Inc.
