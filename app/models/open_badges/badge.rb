@@ -55,7 +55,7 @@ module OpenBadges
       OpenBadges::Engine.routes.url_helpers.badge_url({
         :id => self.id,
         :format => :json,
-        :host => Rails.application.routes.default_url_options[:host]
+        :host => Rails.application.config.default_url_options[:host]
       })
     end
 
