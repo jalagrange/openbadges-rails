@@ -28,7 +28,6 @@ module OpenBadges
     end
   
     # POST /alignments
-    # POST /alignments.json
     def create
       @alignment = Alignment.new(params[:alignment])
   
@@ -42,7 +41,6 @@ module OpenBadges
     end
   
     # PUT /alignments/1
-    # PUT /alignments/1.json
     def update
       @alignment = Alignment.find(params[:id])
   
@@ -59,7 +57,6 @@ module OpenBadges
     end
   
     # DELETE /alignments/1
-    # DELETE /alignments/1.json
     def destroy
       @alignment = Alignment.find(params[:id])
       @alignment.destroy

@@ -5,7 +5,6 @@ module OpenBadges
     load_and_authorize_resource :class => 'OpenBadges::Badge', :except => [:json]
 
     # GET /badges
-    # GET /badges.json
     def index
       @badges = Badge.paginate(:page => params[:page], :per_page => RESULTS_PER_PAGE)
   
@@ -14,7 +13,15 @@ module OpenBadges
       end
     end
   
-    # GET /badges/1
+    # GET /badges/1.json
+    def json
+      @badge = Badge.find(params[:id])
+  
+      respond_to do |format|
+        format.json { render json: @badge }
+      end
+    end
+
     # GET /badges/1.json
     def show
       @badge = Badge.find(params[:id])
@@ -40,7 +47,6 @@ module OpenBadges
     end
   
     # POST /badges
-    # POST /badges.json
     def create
       @badge = Badge.new(params[:badge])
   

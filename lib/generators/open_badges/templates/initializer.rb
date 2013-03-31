@@ -4,4 +4,6 @@ OpenBadges.setup do |config|
 
   config.current_user = 'current_user'
 
+  config.is_openbadges_admin = 'is_openbadges_admin?'
+
 end

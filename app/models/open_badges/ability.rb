@@ -2,15 +2,13 @@ module OpenBadges
   class Ability
     include CanCan::Ability
 
-    def initialize(user)
-      user ||= OpenBadges.user_class.new
-
-      if user.send(OpenBadges.is_openbadges_admin)
+    def initialize(user, format)
+      if user.present? && user.send(OpenBadges.is_openbadges_admin)
         can :manage, :all
-      else
-        can :json, OpenBadges::Badge
-        can :json, OpenBadges::Assertion
-        can :json, OpenBadges::Organization
+      elsif format == 'json'
+        can :show, OpenBadges::Badge
+        can :show, OpenBadges::Assertion
+        can :show, OpenBadges::Organization
       end
     end
   end

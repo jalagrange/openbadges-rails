@@ -69,7 +69,7 @@ module OpenBadges
       json['alignment'] = json.delete(:badge_alignments) unless json[:badge_alignments].nil?
       json['issuer'] = OpenBadges::Engine.routes.url_helpers.organization_url({
         :format => :json,
-        :host => Rails.application.routes.default_url_options[:host]
+        :host => Rails.application.config.default_url_options[:host]
       })
       json
     end
