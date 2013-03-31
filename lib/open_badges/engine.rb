@@ -1,4 +1,4 @@
-require 'devise'
+require 'cancan'
 require 'jquery-rails'
 require 'select2-rails'
 require 'will_paginate'

@@ -2,8 +2,7 @@ require_dependency "open_badges/application_controller"
 
 module OpenBadges
   class AlignmentsController < ApplicationController
-
-    #before_filter :authenticate_user!
+    load_and_authorize_resource :class => 'OpenBadges::Alignment'
 
     # GET /alignments
     def index
@@ -15,7 +14,6 @@ module OpenBadges
     end
   
     # GET /alignments/new
-    # GET /alignments/new.json
     def new
       @alignment = Alignment.new
   
@@ -30,7 +28,6 @@ module OpenBadges
     end
   
     # POST /alignments
-    # POST /alignments.json
     def create
       @alignment = Alignment.new(params[:alignment])
   
@@ -38,13 +35,12 @@ module OpenBadges
         if @alignment.save
           format.html { redirect_to alignments_url, :flash => { :success => 'Alignment was successfully created.' } }
         else
-          format.html { redirect_to :back, :flash => { :error => @alignment.errors.full_messages.first } }
+          format.html { redirect_to :back, :flash => { :error => @alignment.errors.full_messages } }
         end
       end
     end
   
     # PUT /alignments/1
-    # PUT /alignments/1.json
     def update
       @alignment = Alignment.find(params[:id])
   
@@ -52,13 +48,15 @@ module OpenBadges
         if @alignment.update_attributes(params[:alignment])
           format.html { redirect_to alignments_url, notice: 'Alignment was successfully updated.' }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @alignment.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end
   
     # DELETE /alignments/1
-    # DELETE /alignments/1.json
     def destroy
       @alignment = Alignment.find(params[:id])
       @alignment.destroy

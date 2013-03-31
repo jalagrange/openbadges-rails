@@ -75,8 +75,3 @@ OpenBadges::BadgeAlignment.create(
 OpenBadges::BadgeAlignment.create(
   badge_id: 3,
   alignment_id: 3)
-
-OpenBadges::User.create(
-  email: 'admin@openbadges.org',
-  password: 'openbadges'
-)

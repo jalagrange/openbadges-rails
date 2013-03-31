@@ -5,6 +5,17 @@ require 'securerandom'
 
 module OpenBadges
   class AssertionsController < ApplicationController
+    load_and_authorize_resource :class => 'OpenBadges::Assertion'
+
+    # GET /assertions/1.json
+    def show
+      @assertion = Assertion.find(params[:id])
+  
+      respond_to do |format|
+        format.json { render json: @assertion }
+      end
+    end
+
     # GET /assertions
     def index
       @assertions = Assertion.all
@@ -14,23 +25,12 @@ module OpenBadges
       end
     end
   
-    # GET /assertions/1.json
-    def show
-      @assertion = Assertion.find(params[:id])
-  
-      respond_to do |format|
-        format.json { render json: @assertion }
-      end
-    end
-  
     # GET /assertions/new
-    # GET /assertions/new.json
     def new
       @assertion = Assertion.new
   
       respond_to do |format|
         format.html # new.html.erb
-        format.json { render json: @assertion }
       end
     end
   
@@ -56,10 +56,12 @@ module OpenBadges
   
       respond_to do |format|
         if @assertion.save
-
           format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully created.' } }
         else
-          format.html { render action: "new" }
+          format.html {
+            flash[:error] = @assertion.errors.full_messages
+            render action: "new"
+          }
         end
       end
     end
@@ -72,7 +74,10 @@ module OpenBadges
         if @assertion.update_attributes(params[:assertion])
           format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully updated.' } }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @assertion.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end

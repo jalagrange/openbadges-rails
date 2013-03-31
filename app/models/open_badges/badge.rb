@@ -10,8 +10,8 @@ module OpenBadges
     has_attached_file :image, :url => "/:class/:attachment/:id_:filename"
     validates :image, attachment_presence: true
 
-    validates :name, uniqueness: true
     validates :name, presence: true
+    validates :name, uniqueness: true
 
     # Tag List
     attr_writer :tag_list
@@ -50,17 +50,17 @@ module OpenBadges
     end
 
     public
-    def image_url
-      Rails.application.routes.default_url_options[:host] + image.url
-    end
-
-    public
     def url
       OpenBadges::Engine.routes.url_helpers.badge_url({
         :id => self.id,
         :format => :json,
-        :host => Rails.application.routes.default_url_options[:host]
+        :host => Rails.application.config.default_url_options[:host]
       })
+    end
+
+    public
+    def image_url
+      Rails.application.config.default_url_options[:host] + image.url
     end
 
     public
@@ -76,7 +76,7 @@ module OpenBadges
       json['alignment'] = json.delete(:badge_alignments) unless json[:badge_alignments].nil?
       json['issuer'] = OpenBadges::Engine.routes.url_helpers.organization_url({
         :format => :json,
-        :host => Rails.application.routes.default_url_options[:host]
+        :host => Rails.application.config.default_url_options[:host]
       })
       json
     end

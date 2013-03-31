@@ -4,7 +4,13 @@ module OpenBadges
   class << self
 
     mattr_accessor :user_class
-      @@user_class = nil
+    @@user_class = nil
+
+    mattr_accessor :current_user
+  	@@current_user = ''
+
+  	mattr_accessor :is_openbadges_admin
+  	@@is_openbadges_admin = ''
 
     # setup user config
     def setup
@@ -44,15 +50,14 @@ module OpenBadges
 
       Rails.logger.info("Issue success: " << success.to_s)
 
-      return success
-
       #image = ChunkyPNG::Image.from_blob(open(badge.image).read) # maybe can use from url
       #image = ChunkyPNG::Image.from_file(assertion.badge.image) # probably local files only
       #image.metadata['openbadges'] = assertions_url
       #image.to_blob # no save
       #image.save('file.png')
 
-      # user_class.find(options[:id])
+      return success
     end
+
   end
 end

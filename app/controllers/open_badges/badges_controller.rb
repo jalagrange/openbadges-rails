@@ -2,21 +2,8 @@ require_dependency "open_badges/application_controller"
 
 module OpenBadges
   class BadgesController < ApplicationController
+    load_and_authorize_resource :class => 'OpenBadges::Badge'
 
-    #before_filter :authenticate_user!, :except => :show
-
-    # GET /badges
-    # GET /badges.json
-    def index
-      @badges = Badge.paginate(:page => params[:page],
-        :per_page => RESULTS_PER_PAGE)
-  
-      respond_to do |format|
-        format.html # index.html.erb
-      end
-    end
-  
-    # GET /badges/1
     # GET /badges/1.json
     def show
       @badge = Badge.find(params[:id])
@@ -25,9 +12,17 @@ module OpenBadges
         format.json { render json: @badge }
       end
     end
+
+    # GET /badges
+    def index
+      @badges = Badge.paginate(:page => params[:page], :per_page => RESULTS_PER_PAGE)
+  
+      respond_to do |format|
+        format.html # index.html.erb
+      end
+    end
   
     # GET /badges/new
-    # GET /badges/new.json
     def new
       @badge = Badge.new
   
@@ -42,7 +37,6 @@ module OpenBadges
     end
   
     # POST /badges
-    # POST /badges.json
     def create
       @badge = Badge.new(params[:badge])
   
@@ -50,7 +44,10 @@ module OpenBadges
         if @badge.save
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully created.' } }
         else
-          format.html { render action: "new" }
+          format.html {
+            flash[:error] = @badge.errors.full_messages
+            render action: "new"
+          }
         end
       end
     end
@@ -63,13 +60,15 @@ module OpenBadges
         if @badge.update_attributes(params[:badge])
           format.html { redirect_to badges_url, :flash => { :success => 'Badge was successfully updated.' } }
         else
-          format.html { render action: "edit" }
+          format.html {
+            flash[:error] = @badge.errors.full_messages
+            render action: "edit"
+          }
         end
       end
     end
   
     # DELETE /badges/1
-    # DELETE /badges/1.json
     def destroy
       @badge = Badge.find(params[:id])
       @badge.destroy

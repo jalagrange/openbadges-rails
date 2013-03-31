@@ -2,8 +2,7 @@ require_dependency "open_badges/application_controller"
 
 module OpenBadges
   class OrganizationsController < ApplicationController
-
-    #before_filter :authenticate_user!
+    load_and_authorize_resource :class => 'OpenBadges::Organization'
 
     # GET /organization
     def show
@@ -23,7 +22,7 @@ module OpenBadges
         if @organization.update_attributes(params[:organization])
           format.html { redirect_to :back, :flash => { :success => 'Organization was successfully updated.' } }
         else
-          format.html { redirect_to :back, :flash => { :error => 'Organization was not successfully updated.' } }
+          format.html { redirect_to :back, :flash => { :error => @organization.errors.full_messages } }
         end
       end
     end
