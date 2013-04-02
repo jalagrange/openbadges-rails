@@ -3,4 +3,6 @@ source "http://rubygems.org"
 gem 'rails', '~>3.0'
 gem 'sqlite3'
 gem 'devise', '~>2.2.3'
+gem 'sass-rails', '~> 3.2'
+gem 'bootstrap-sass', '~> 2.0'
 gem 'open_badges', '0.0.1', :path => '../..'

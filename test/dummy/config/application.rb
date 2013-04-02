@@ -4,6 +4,7 @@ require 'rails/all'
 
 Bundler.require
 require "open_badges"
+require 'bootstrap-sass'
 
 module Dummy
   class Application < Rails::Application

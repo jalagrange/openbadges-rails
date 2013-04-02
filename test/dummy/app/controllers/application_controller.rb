@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # GET /
   def index
     respond_to do |format|
-      format.html { redirect_to open_badges_url }
+      format.html
 	end
   end
 end

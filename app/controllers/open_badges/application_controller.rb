@@ -15,7 +15,7 @@ module OpenBadges
   	# GET /
     def index
       respond_to do |format|
-        format.html # show.html.erb
+        format.html # index.html.erb
 
         # OpenBadges::issue(1, 'a@b.c', 1, {
         #   issued_on: DateTime.new(2025, 3, 29),
