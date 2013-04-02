@@ -1,3 +1,4 @@
+User.delete_all
 OpenBadges::Badge.delete_all
 OpenBadges::Tag.delete_all
 OpenBadges::BadgeTag.delete_all
@@ -5,6 +6,10 @@ OpenBadges::Alignment.delete_all
 OpenBadges::BadgeAlignment.delete_all
 
 image_path = File.join(Rails.root, '/app/assets')
+
+User.create(
+  :email => "admin@openbadges.org",
+  :password => 'openbadges')
 
 OpenBadges::Badge.create(
   id: 1,
