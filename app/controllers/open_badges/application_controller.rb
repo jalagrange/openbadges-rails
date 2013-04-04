@@ -2,7 +2,7 @@ module OpenBadges
   class ApplicationController < ActionController::Base
 
   	rescue_from CanCan::AccessDenied do |exception|
-      redirect_to '/', :flash => { :error => exception.message }
+      redirect_to '/' #, :flash => { :error => exception.message }
   	end
 
   	def current_ability
@@ -15,7 +15,7 @@ module OpenBadges
   	# GET /
     def index
       respond_to do |format|
-        format.html # index.html.erb
+        format.html { redirect_to badges_url }
 
         # OpenBadges::issue(1, 'a@b.c', 1, {
         #   issued_on: DateTime.new(2025, 3, 29),
