@@ -15,9 +15,13 @@ Install
 rails g open_badges:install
 ```
 
-Set user class in "config/initializers/open_badges.rb"
+Set engine configurations at "config/initializers/open_badges.rb"
 ```sh
 config.user_class = User
+
+config.current_user = 'current_user'
+
+config.is_openbadges_admin = 'is_openbadges_admin?'
 ```
 
 Set default url options for each environment in "config/environments/"
@@ -25,19 +29,21 @@ Set default url options for each environment in "config/environments/"
 config.default_url_options = { :host => 'localhost:3000' }
 ```
 
-## Create db tables
+## Development
+
+### Create db tables
     openbadges-rails> rake db:migrate
 
 
-## Load seed data into db
+### Load seed data into db
     openbadges-rails> rake db:seed
 
 
-## Running tests
+### Running tests
     openbadges-rails> rake test              // Run all tests
     openbadges-rails> rake app:test:units    // Run unit tests only
 
-## Uploaded Images
+### Uploaded Images
 
 Uploaded images are stored in
 
