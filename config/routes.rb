@@ -1,6 +1,6 @@
 OpenBadges::Engine.routes.draw do
 
-  root :to => "application#index"
+  #root :to => "application#index"
 
   resources :tags
 
