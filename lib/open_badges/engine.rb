@@ -1,3 +1,4 @@
+require 'devise'
 require 'cancan'
 require 'jquery-rails'
 require 'select2-rails'
