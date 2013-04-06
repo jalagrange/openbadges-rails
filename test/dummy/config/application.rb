@@ -3,7 +3,8 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require
-require "open_badges"
+require 'devise'
+require 'open_badges'
 require 'bootstrap-sass'
 
 module Dummy
