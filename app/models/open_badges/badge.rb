@@ -58,7 +58,6 @@ module OpenBadges
       })
     end
 
-    public
     def image_url
       Rails.application.config.default_url_options[:host] + image.url
     end

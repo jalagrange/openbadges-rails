@@ -10,19 +10,20 @@ module OpenBadges
     validates :identity, :identity_hashed, :identity_type, presence: true
 
     validates :badge, :presence => { message: "does not exists" }
+    validates_uniqueness_of :user_id, :scope => :badge_id, message: "assertion exists"
+
+    attr_accessible :image
+    has_attached_file :image, :url => "/:class/:attachment/:id_baked_:filename"
     
-    attr_accessible :user_ids
-    attr_accessible :badge_id, :evidence, :expires, :image
+    attr_accessible :user_id
+    attr_accessible :badge_id, :evidence, :expires
     attr_accessible :identity, :identity_hashed, :identity_salt, :identity_type
     attr_accessible :verification_type
 
-    # class << self
-    #   def associate_user_class(user_class)
-    #     belongs_to :user, :class_name => user_class.to_s, :foreign_key => 'user_id'
-    #   end
-    # end
-
     after_initialize :assign_defaults
+    after_save :bake_image
+
+    OPENBADGES_METADATA_KEY = 'openbadges'
 
     private
     def assign_defaults
@@ -36,7 +37,19 @@ module OpenBadges
       end
     end
 
+    def bake_image
+      if self.image?
+        png = ChunkyPNG::Image.from_file(self.image.path)
+
+        if !png.metadata.has_key? OPENBADGES_METADATA_KEY
+            png.metadata[OPENBADGES_METADATA_KEY] = self.url
+            png.save(self.image.path)
+        end
+      end
+    end
+
     public
+
     def url
       OpenBadges::Engine.routes.url_helpers.assertion_url({
         :id => self.id,
@@ -45,7 +58,6 @@ module OpenBadges
       })
     end
 
-    public
     def as_json(options = nil)
       json = super( :only => [] )
       json.merge!({

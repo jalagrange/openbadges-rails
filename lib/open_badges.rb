@@ -22,42 +22,55 @@ module OpenBadges
     # user_id    - Integer
     # user_email - String
     # badge_id   - Integer
+    # bake_badge - Boolean
     # params     - Hash of optional parameters.
     #   :issued_on  - DateTime (or any valid DateTime string), default = now.
     #   :evidence   - String
     #   :expires    - DateTime (or any valid DateTime string)
     #
-    # Example
-    #
-    # issue (1, a@b.c, 2, {
-    #   evidence: "Some Evidence",
-    #   expires: DateTime.new(2025, 3, 29)})
-    #
+    # returns a hash
+    #   :success - Boolean
+    #   :assertion_id - Integer
+    #   :errors - Array of errors
+    #     ERROR_INVALID_USER
+    #     ERROR_INVALID_BADGE
+    #     ERROR_ASSERTION_EXIST
     public
-    def issue(user_id, user_email, badge_id, params = {})
+    def issue(user_id, user_email, badge_id, bake_badge = true, params = {})
 
-      success = false
+      result = {}
+      result[:success] = false
+      result[:errors] = []
 
-      assertion = OpenBadges::Assertion.new(user_id: user_id, badge_id: badge_id)
+      assertion = OpenBadges::Assertion.new(
+        user_id: user_id,
+        badge_id: badge_id,
+        evidence: params[:evidence],
+        expires: params[:expires])
       assertion.created_at = params[:issued_on]
-      assertion.evidence = params[:evidence]
-      assertion.expires = params[:expires]
 
       if assertion.valid?
+
+        if bake_badge
+          assertion.image = File.open assertion.badge.image.path
+        end
         assertion.save
-        success = true
+
+        result[:assertion_id] = assertion.id
+        result[:success] = true;
+      else
+        if assertion.errors[:badge_id].any?
+          result[:errors] << "ERROR_INVALID_BADGE"
+        end
+
+        if assertion.errors[:user_id].include? "assertion exists"
+          result[:errors] << "ERROR_ASSERTION_EXIST"
+        end
       end
 
-      Rails.logger.info("Issue success: " << success.to_s)
+      Rails.logger.info("result: " + result.to_s)
 
-      #image = ChunkyPNG::Image.from_blob(open(badge.image).read) # maybe can use from url
-      #image = ChunkyPNG::Image.from_file(assertion.badge.image) # probably local files only
-      #image.metadata['openbadges'] = assertions_url
-      #image.to_blob # no save
-      #image.save('file.png')
-
-      return success
+      return result
     end
-
   end
 end
