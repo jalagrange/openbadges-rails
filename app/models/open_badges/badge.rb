@@ -7,7 +7,15 @@ module OpenBadges
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
-    has_attached_file :image, :url => "/:class/:attachment/:id_:filename"
+    Paperclip.interpolates :mount_path do |attachment, style|
+      OpenBadges::Engine.routes.url_helpers.root_path
+    end
+
+    Paperclip.interpolates :class_without_namespace do |attachment, style|
+        attachment.instance.class.name.split('::').last.downcase.pluralize
+    end
+
+    has_attached_file :image, :url => ":mount_path:class_without_namespace/:attachment/:id.:extension"
     validates :image, attachment_presence: true
 
     validates :name, presence: true
@@ -60,7 +68,9 @@ module OpenBadges
 
     public
     def image_url
-      Rails.application.config.default_url_options[:host] + image.url
+      Rails.application.routes.url_helpers.root_url({
+        :host => Rails.application.config.default_url_options[:host]
+      }).gsub(/\/$/, '') + image.url(:original, false)
     end
 
     public

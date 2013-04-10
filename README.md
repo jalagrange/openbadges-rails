@@ -31,6 +31,9 @@ config.default_url_options = { :host => 'localhost:3000' }
 
 Integrate JavaScript Issuer API
 https://github.com/mozilla/openbadges/wiki/Issuer-API
+```sh
+<%= javascript_include_tag "http://beta.openbadges.org/issuer.js" %>
+```
 
 ## Development
 

@@ -48,25 +48,56 @@ module OpenBadges
     public
     def as_json(options = nil)
       json = super( :only => [] )
+
+      @organization = Organization.first || Organization.new
+
       json.merge!({
-        :uid => self.id.to_s,
-        :badge => self.badge.url,
-        :issuedOn => self.created_at.to_i,
-        :recipient => {
-          :identity => self.identity,
-          :type => self.identity_type,
-          :salt => self.identity_salt,
-          :hashed => self.identity_hashed
-        },
-        :verify => {
-          :url => self.url,
-          :type => self.verification_type
+        :salt => self.identity_salt,
+        :issued_on => self.created_at.to_date,
+        :recipient => self.identity,
+        :badge => {
+          :name => self.badge.name,
+          :version => '0.5.0',
+          :image => self.badge.image_url,
+          :description => self.badge.description,
+          :issuer => {
+            :org => @organization.name,
+            :name => @organization.name,
+            :origin => @organization.url,
+            :contact => @organization.email
+          }
         }
       })
       json[:image] = self.image unless self.image.nil? || self.image.empty?
       json[:evidence] = self.evidence unless self.evidence.nil? || self.evidence.empty?
-      json[:expires] = self.expires.to_i unless self.expires.nil?
+      json[:expires] = self.expires.to_date unless self.expires.nil?
+
+      json[:badge][:criteria] = self.badge.criteria unless self.badge.criteria.nil?
       json
     end
+
+    # public
+    # def as_json(options = nil)
+    #   json = super( :only => [] )
+    #   json.merge!({
+    #     :uid => self.id.to_s,
+    #     :badge => self.badge.url,
+    #     :issuedOn => self.created_at.to_i,
+    #     :recipient => {
+    #       :identity => self.identity,
+    #       :type => self.identity_type,
+    #       :salt => self.identity_salt,
+    #       :hashed => self.identity_hashed
+    #     },
+    #     :verify => {
+    #       :url => self.url,
+    #       :type => self.verification_type
+    #     }
+    #   })
+    #   json[:image] = self.image unless self.image.nil? || self.image.empty?
+    #   json[:evidence] = self.evidence unless self.evidence.nil? || self.evidence.empty?
+    #   json[:expires] = self.expires.to_i unless self.expires.nil?
+    #   json
+    # end
   end
 end
