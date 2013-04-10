@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <title>TestDummy</title>
     
-    <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+
+    <script src="http://beta.openbadges.org/issuer.js"></script>
 
     <style>
       body {
@@ -29,7 +31,7 @@
 
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class=<%= 'active' if current_page?(open_badges_path) %>>
+              <li>
                 <%= link_to 'OpenBadges', open_badges_path %>
               </li>
             </ul>
@@ -43,8 +45,8 @@
                 <% end %>
               </li>
             </ul>
-
           </div>
+
         </div>
       </div>
     </div>

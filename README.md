@@ -10,7 +10,7 @@ gem 'open_badges', '0.0.1', :path => '/path/to/openbadges-rails'
 bundle install
 ```
 
-Install
+Install to run database migrations and mount engine
 ```sh
 rails g open_badges:install
 ```
@@ -29,14 +29,22 @@ Set default url options for each environment in "config/environments/"
 config.default_url_options = { :host => 'localhost:3000' }
 ```
 
+Integrate JavaScript Issuer API
+https://github.com/mozilla/openbadges/wiki/Issuer-API
+
 ## Development
 
-### Create db tables
-    openbadges-rails> rake db:migrate
+Run migrations
+```sh
+cd test/dummy
+dummy> rake openbadges:install:migrations
+dummy> rake db:migrate
+```
 
-
-### Load seed data into db
-    openbadges-rails> rake db:seed
+Seed db with data
+```sh
+dummy> rake db:seed
+```
 
 
 ### Running tests
