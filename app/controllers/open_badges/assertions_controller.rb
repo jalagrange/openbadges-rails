@@ -88,7 +88,7 @@ module OpenBadges
       @assertion.destroy
   
       respond_to do |format|
-        format.html { redirect_to assertions_url }
+        format.html { redirect_to assertions_url, :flash => { :success => 'Assertion was successfully deleted.' } }
       end
     end
   end
