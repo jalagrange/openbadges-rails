@@ -68,11 +68,14 @@ ActiveRecord::Schema.define(:version => 20130402013845) do
   create_table "open_badges_organizations", :force => true do |t|
     t.string   "url"
     t.string   "name"
-    t.string   "image"
     t.string   "email"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
   create_table "open_badges_tags", :force => true do |t|

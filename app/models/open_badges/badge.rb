@@ -64,7 +64,6 @@ module OpenBadges
       Rails.application.config.default_url_options[:host] + image.url
     end
 
-    public
     def as_json(options = nil)
       json = super(
         :methods => [:badge_tags, :badge_alignments],
