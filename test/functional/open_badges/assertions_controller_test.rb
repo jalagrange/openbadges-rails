@@ -2,6 +2,8 @@ require 'test_helper'
 
 module OpenBadges
   class AssertionsControllerTest < ActionController::TestCase
+    fixtures :all
+    
     setup do
       @assertion = open_badges_assertions(:androidAssertion)
     end
@@ -26,11 +28,18 @@ module OpenBadges
     # end
 
     test "should show assertion json" do
+      
+      # Attach image file
+      image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
+      image = File.open(image_path)
+      @assertion.update_attributes(:image => image)
+
       get :show, id: @assertion, :format => "json"
       assert_response :success
 
       json = JSON.parse response.body
       assert_equal json["badge"], "http://localhost:3000/open_badges/badges/1.json"
+      assert_not_nil json["image"], "Image invalid"
 
       recipient = json["recipient"]
       assert_not_nil "Json not found", recipient
@@ -46,6 +55,8 @@ module OpenBadges
 
       assert_equal "Some Evidence", json["evidence"], "Evidence invalid"
       assert_equal DateTime.parse("2001-01-01 01:01:01").to_i, json["expires"], "Expires invalid"
+
+      @assertion.destroy
     end
   
     # test "should show assertion" do

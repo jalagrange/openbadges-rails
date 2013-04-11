@@ -3,27 +3,30 @@ require 'securerandom'
 
 module OpenBadges
   class Assertion < ActiveRecord::Base
+
     belongs_to :badge
 
-    validates :badge_id, presence: true
-    validates :verification_type, presence: true
+    validates :badge_id, :verification_type, presence: true
     validates :identity, :identity_hashed, :identity_type, presence: true
 
     validates :badge, :presence => { message: "does not exists" }
     validates_uniqueness_of :user_id, :scope => :badge_id, message: "assertion exists"
 
-    attr_accessible :image
-    has_attached_file :image, :url => "/:class/:attachment/:id_baked_:filename"
+    has_attached_file :image, :url => "/:class/:attachment/:id_baked_:filename",
+      :default_url => "/open_badges/missing.png"
     
-    attr_accessible :user_id
-    attr_accessible :badge_id, :evidence, :expires
+    attr_accessible :image, :user_id, :badge_id, :evidence, :expires
     attr_accessible :identity, :identity_hashed, :identity_salt, :identity_type
     attr_accessible :verification_type
 
     after_initialize :assign_defaults
     after_save :bake_image
 
-    OPENBADGES_METADATA_KEY = 'openbadges'
+    @@OPENBADGES_METADATA_KEY = 'openbadges'
+
+    def Assertion.OPENBADGES_METADATA_KEY
+      @@OPENBADGES_METADATA_KEY
+    end
 
     private
     def assign_defaults
@@ -41,21 +44,24 @@ module OpenBadges
       if self.image?
         png = ChunkyPNG::Image.from_file(self.image.path)
 
-        if !png.metadata.has_key? OPENBADGES_METADATA_KEY
-            png.metadata[OPENBADGES_METADATA_KEY] = self.url
+        if !png.metadata.has_key? @@OPENBADGES_METADATA_KEY
+            png.metadata[@@OPENBADGES_METADATA_KEY] = self.url
             png.save(self.image.path)
         end
       end
     end
 
     public
-
     def url
       OpenBadges::Engine.routes.url_helpers.assertion_url({
         :id => self.id,
         :format => :json,
         :host => Rails.application.config.default_url_options[:host]
       })
+    end
+
+    def image_url
+      Rails.application.config.default_url_options[:host] + image.url
     end
 
     def as_json(options = nil)
@@ -73,9 +79,9 @@ module OpenBadges
         :verify => {
           :url => self.url,
           :type => self.verification_type
-        }
+        },
+        :image => (self.image_url unless !self.image?)
       })
-      json[:image] = self.image unless self.image.nil? || self.image.empty?
       json[:evidence] = self.evidence unless self.evidence.nil? || self.evidence.empty?
       json[:expires] = self.expires.to_i unless self.expires.nil?
       json

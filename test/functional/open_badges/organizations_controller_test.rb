@@ -2,6 +2,8 @@ require 'test_helper'
 
 module OpenBadges
   class OrganizationsControllerTest < ActionController::TestCase
+    fixtures :all
+    
     setup do
       @organization = open_badges_organizations(:smart)
     end

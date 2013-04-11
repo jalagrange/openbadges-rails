@@ -80,3 +80,10 @@ OpenBadges::BadgeAlignment.create(
 OpenBadges::BadgeAlignment.create(
   badge_id: 3,
   alignment_id: 3)
+
+OpenBadges::Assertion.create(
+  user_id: 1,
+  badge_id: 1,
+  evidence: "Some Evidence",
+  expires: DateTime.new(2025, 3, 29),
+  image: File.open(OpenBadges::Badge.find(1).image.path))

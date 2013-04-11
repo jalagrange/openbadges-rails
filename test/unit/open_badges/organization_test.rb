@@ -2,6 +2,7 @@ require 'test_helper'
 
 module OpenBadges
   class OrganizationTest < ActiveSupport::TestCase
+    fixtures :all
 
     test "organization attributes must not be empty" do
       organization = Organization.new

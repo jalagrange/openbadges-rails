@@ -2,6 +2,7 @@ require 'test_helper'
 
 module OpenBadges
   class BadgesControllerTest < ActionController::TestCase
+    fixtures :all
 
     setup do
       @badge = open_badges_badges(:android)
@@ -31,12 +32,17 @@ module OpenBadges
     # end
   
     test "should show badge json" do
+      # Attach image file
+      image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
+      image = File.open(image_path)
+      @badge.update_attributes(:image => image)
+
       get :show, id: @badge, :format => "json"
       assert_response :success
 
       json = JSON.parse response.body
       assert_equal "Android", json["name"], "Name invalid"
-      assert_equal "android.jpg", json["image"], "Image invalid"
+      assert_not_nil json["image"], "Image invalid"
       assert_not_nil json["description"], "Description invalid"
 
       tags = json["tags"]
@@ -47,7 +53,11 @@ module OpenBadges
       assert_not_nil alignments, "Alignments invalid"
       assert_equal 1, alignments.length, "Alignments length invalid"
 
-      assert_equal "http://localhost:3000/open_badges/organization.json", json["issuer"], "Issuer invalid"
+      assert_equal "http://localhost:3000/open_badges/organization.json",
+        json["issuer"],
+        "Issuer invalid"
+      
+      @badge.destroy
     end
   
     # test "should get edit" do

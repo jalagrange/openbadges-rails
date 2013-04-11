@@ -4,10 +4,12 @@ module OpenBadges
     has_many :tags, through: :badge_tags
     has_many :badge_alignments, dependent: :destroy
     has_many :alignments, through: :badge_alignments
+    has_many :assertions, dependent: :destroy
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
-    has_attached_file :image, :url => "/:class/:attachment/:id_:filename"
+    has_attached_file :image, :url => "/:class/:attachment/:id_:filename",
+      :default_url => "/open_badges/missing.png"
     validates :image, attachment_presence: true
 
     validates :name, presence: true
@@ -69,7 +71,7 @@ module OpenBadges
         :only => [:name, :criteria, :badge_tags, :badge_alignments, :description]
       ).reject{ |key, value| value.nil? || value.empty? }
       json.merge!({
-        :image => self.image_url
+        :image => (self.image_url unless !self.image?)
         })
       json['tags'] = json.delete(:badge_tags) unless json[:badge_tags].nil?
       json['alignment'] = json.delete(:badge_alignments) unless json[:badge_alignments].nil?

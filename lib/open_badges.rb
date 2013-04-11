@@ -31,16 +31,20 @@ module OpenBadges
     # returns a hash
     #   :success - Boolean
     #   :assertion_id - Integer
-    #   :errors - Array of errors
-    #     ERROR_INVALID_USER
+    #   :error - String
     #     ERROR_INVALID_BADGE
     #     ERROR_ASSERTION_EXIST
+    #
+    # example:
+    # OpenBadges::issue(@user_id, @user_email, @badge.id, false, {
+    #     issued_on: DateTime.new(2025, 3, 29),
+    #     evidence: "Some Evidence",
+    #     expires: DateTime.new(2025, 3, 29)})
     public
     def issue(user_id, user_email, badge_id, bake_badge = true, params = {})
 
       result = {}
       result[:success] = false
-      result[:errors] = []
 
       assertion = OpenBadges::Assertion.new(
         user_id: user_id,
@@ -50,7 +54,6 @@ module OpenBadges
       assertion.created_at = params[:issued_on]
 
       if assertion.valid?
-
         if bake_badge
           assertion.image = File.open assertion.badge.image.path
         end
@@ -59,18 +62,21 @@ module OpenBadges
         result[:assertion_id] = assertion.id
         result[:success] = true;
       else
-        if assertion.errors[:badge_id].any?
-          result[:errors] << "ERROR_INVALID_BADGE"
-        end
+        if assertion.errors[:badge].any?
+          result[:error] = "ERROR_INVALID_BADGE"
 
-        if assertion.errors[:user_id].include? "assertion exists"
-          result[:errors] << "ERROR_ASSERTION_EXIST"
+        elsif assertion.errors[:user_id].include? "assertion exists"
+          result[:error] = "ERROR_ASSERTION_EXIST"
         end
       end
 
       Rails.logger.info("result: " + result.to_s)
 
       return result
+    end
+
+    def issueToMozillaBackpack(user_id, user_email, badge_id, params = {})
+
     end
   end
 end
