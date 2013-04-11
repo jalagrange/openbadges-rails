@@ -32,10 +32,13 @@ module OpenBadges
       @alignment = Alignment.new(params[:alignment])
   
       respond_to do |format|
-        if @alignment.save
+        if @alignment.update_attributes(params[:alignment])
           format.html { redirect_to alignments_url, :flash => { :success => 'Alignment was successfully created.' } }
         else
-          format.html { redirect_to :back, :flash => { :error => @alignment.errors.full_messages } }
+          format.html {
+            flash[:error] = @alignment.errors.full_messages
+            render action: "new"
+          }
         end
       end
     end
@@ -46,7 +49,7 @@ module OpenBadges
   
       respond_to do |format|
         if @alignment.update_attributes(params[:alignment])
-          format.html { redirect_to alignments_url, notice: 'Alignment was successfully updated.' }
+          format.html { redirect_to alignments_url, :flash => { :success => 'Alignment was successfully updated.' } }
         else
           format.html {
             flash[:error] = @alignment.errors.full_messages
@@ -62,7 +65,7 @@ module OpenBadges
       @alignment.destroy
   
       respond_to do |format|
-        format.html { redirect_to alignments_url }
+        format.html { redirect_to alignments_url, :flash => { :success => 'Alignment was successfully deleted.' } }
       end
     end
   end

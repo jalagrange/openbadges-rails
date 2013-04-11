@@ -80,3 +80,18 @@ OpenBadges::BadgeAlignment.create(
 OpenBadges::BadgeAlignment.create(
   badge_id: 3,
   alignment_id: 3)
+
+OpenBadges::Organization.create(
+  name: "School of Magic",
+  url: "http://www.schoolofmagic.com",
+  image: File.open(File.join(image_path, 'wizard.png')),
+  email: "schoolofmagic@magic.com",
+  description: "Legendary school that brings out your arcane potential."
+  )
+
+OpenBadges::Assertion.create(
+  user_id: 1,
+  badge_id: 1,
+  evidence: "Some Evidence",
+  expires: DateTime.new(2025, 3, 29),
+  image: File.open(OpenBadges::Badge.find(1).image.path))

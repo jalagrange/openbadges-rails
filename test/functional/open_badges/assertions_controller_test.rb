@@ -2,35 +2,76 @@ require 'test_helper'
 
 module OpenBadges
   class AssertionsControllerTest < ActionController::TestCase
+    fixtures :all
+    
     setup do
       @assertion = open_badges_assertions(:androidAssertion)
     end
-  
-    # test "should get index" do
-    #   get :index
-    #   assert_response :success
-    #   assert_not_nil assigns(:assertions)
-    # end
-  
-    # test "should get new" do
-    #   get :new
-    #   assert_response :success
-    # end
-  
-    # test "should create assertion" do
-    #   assert_difference('Assertion.count') do
-    #     post :create, assertion: { badge_id: @assertion.badge_id, evidence: @assertion.evidence, expires: @assertion.expires, identity: @assertion.identity, identity_hashed: @assertion.identity_hashed, identity_salt: @assertion.identity_salt, identity_type: @assertion.identity_type, image: @assertion.image, issued_on: @assertion.issued_on, verification_type: @assertion.verification_type, verification_url: @assertion.verification_url }
-    #   end
-  
-    #   assert_redirected_to assertion_path(assigns(:assertion))
-    # end
 
-    test "should show assertion json" do
+    test "access for user who is not signed in" do
+      get :index
+      assert_response :redirect, "get index should not be allowed"
+      
+      get :new
+      assert_response :redirect, "get new should not be allowed"
+      
+      get :edit, id: @assertion
+      assert_response :redirect, "get edit should not be allowed"
+      
+      post :create
+      assert_response :redirect, "post create should not be allowed"
+      
+      put :update, id: @assertion
+      assert_response :redirect, "put update should not be allowed"
+
+      get :show, id: @assertion, format: :json
+      assert_response :success, "get assertion json should be allowed"
+
+      assert_difference('Assertion.count', 0, "assertion deletion should not be allowed") do
+        delete :destroy, id: @assertion
+      end
+    end
+
+    test "access for user who is signed in" do
+      sign_in User.first
+
+      get :index
+      assert_response :success, "get index should be allowed"
+      
+      get :new
+      assert_response :success, "get new should be allowed"
+      
+      get :edit, id: @assertion
+      assert_response :success, "get edit should be allowed"
+      
+      post :create
+      assert_response :success, "post create should be allowed"
+      
+      put :update, id: @assertion
+      assert_redirected_to assertions_path, "put update should be allowed"
+
+      get :show, id: @assertion, format: :json
+      assert_response :success, "get assertion json should be allowed"
+
+      assert_difference('Assertion.count', -1, "assertion deletion should be allowed") do
+        delete :destroy, id: @assertion
+      end
+      assert_redirected_to assertions_path, "should redirect to assertion page after deletion"
+    end
+
+    test "assertion json validity" do
+      
+      # Attach image file
+      image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
+      image = File.open(image_path)
+      @assertion.update_attributes(:image => image)
+
       get :show, id: @assertion, :format => "json"
       assert_response :success
 
       json = JSON.parse response.body
       assert_equal json["badge"], "http://localhost:3000/open_badges/badges/1.json"
+      assert_not_nil json["image"], "Image invalid"
 
       recipient = json["recipient"]
       assert_not_nil "Json not found", recipient
@@ -46,29 +87,8 @@ module OpenBadges
 
       assert_equal "Some Evidence", json["evidence"], "Evidence invalid"
       assert_equal DateTime.parse("2001-01-01 01:01:01").to_i, json["expires"], "Expires invalid"
+
+      @assertion.destroy
     end
-  
-    # test "should show assertion" do
-    #   get :show, id: @assertion
-    #   assert_response :success
-    # end
-  
-    # test "should get edit" do
-    #   get :edit, id: @assertion
-    #   assert_response :success
-    # end
-  
-    # test "should update assertion" do
-    #   put :update, id: @assertion, assertion: { badge_id: @assertion.badge_id, evidence: @assertion.evidence, expires: @assertion.expires, identity: @assertion.identity, identity_hashed: @assertion.identity_hashed, identity_salt: @assertion.identity_salt, identity_type: @assertion.identity_type, image: @assertion.image, issued_on: @assertion.issued_on, verification_type: @assertion.verification_type, verification_url: @assertion.verification_url }
-    #   assert_redirected_to assertion_path(assigns(:assertion))
-    # end
-  
-    # test "should destroy assertion" do
-    #   assert_difference('Assertion.count', -1) do
-    #     delete :destroy, id: @assertion
-    #   end
-  
-    #   assert_redirected_to assertions_path
-    # end
   end
 end

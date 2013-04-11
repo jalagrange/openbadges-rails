@@ -2,6 +2,7 @@ require 'test_helper'
 
 module OpenBadges
   class BadgeAlignmentTest < ActiveSupport::TestCase
+    fixtures :all
     
     setup do
       @android_badge = open_badges_badges(:android)

@@ -1,5 +1,15 @@
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   <legend>Issuer Organization Details</legend>
+
+  <div class= "badge-edit-image" id="image">
+    <label for="image">Image (optional)</label>
+    <%= image_tag @organization.image.url, class: 'badge-image'%>
+    <input type="file" name="organization[image]">
+    <span class="help-block">
+      An image representing the organization.
+    </span>
+  </div>
+
   <div>
     <label for="name">Name</label>
     <input type="text"
@@ -45,34 +55,8 @@
       instead.
     </span>
   </div>
-
+  
   <div>
-    <label for="image">Image (optional)</label>
-    <input type="url"
-           id="image"
-           class="input-xlarge"
-           name="organization[image]"
-           value="<%= @organization.image %>"
-           placeholder="http://example.org/icon.png">
-    <span class="help-block">
-      An image representing the organization.
-    </span>
-  </div>
-<!--
-  <div>
-    <label for="secret">Token Secret</label>
-    <input type="text"
-           id="secret"
-           name="secret"
-           value="{{issuer.jwtSecret | undef}}"
-           placeholder="shhh secret">
-    <span class="help-block">
-      The secret used to sign tokens. Leave this blank to auto-generate
-      a 64 character random secret.
-    </span>
-  </div>
--->
- <div>
     <label for="description">Description (optional)</label>
     <textarea
            id="description"
@@ -84,7 +68,7 @@
     <span class="help-block">
       A short description of the organization for your issuer.
     </span>
- </div>
+  </div>
 
   <div class="form-actions">
     <button id="save-issuer" type="submit" class="btn btn-primary">Save Configuration</button>
