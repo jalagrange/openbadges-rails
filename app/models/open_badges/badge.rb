@@ -68,9 +68,10 @@ module OpenBadges
 
     public
     def image_url
-      Rails.application.routes.url_helpers.root_url({
-        :host => Rails.application.config.default_url_options[:host]
-      }).gsub(/\/$/, '') + image.url(:original, false)
+      #Rails.application.routes.url_helpers.root_url({
+      #  :host => Rails.application.config.default_url_options[:host]
+      #}).gsub(/\/$/, '') + image.url(:original, false)
+      image.url(:original, false)
     end
 
     public
