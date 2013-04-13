@@ -1,7 +1,7 @@
 module AttachmentHelper
 
   ATTACHMENT_URL = ":mount_path:class_without_namespace/:attachment/:id.:extension"
-  MISSING_IMAGE_URL = "/open_badges/missing.png"
+  MISSING_IMAGE_URL = "open_badges/missing.png"
 
   def image_url
     Rails.application.routes.url_helpers.root_url({
