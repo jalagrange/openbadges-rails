@@ -2,50 +2,55 @@ require 'test_helper'
 
 module OpenBadges
   class AlignmentsControllerTest < ActionController::TestCase
-    # setup do
-    #   @alignment = alignments(:one)
-    # end
-  
-    # test "should get index" do
-    #   get :index
-    #   assert_response :success
-    #   assert_not_nil assigns(:alignments)
-    # end
-  
-    # test "should get new" do
-    #   get :new
-    #   assert_response :success
-    # end
-  
-    # test "should create alignment" do
-    #   assert_difference('Alignment.count') do
-    #     post :create, alignment: { description: @alignment.description, name: @alignment.name, url: @alignment.url }
-    #   end
-  
-    #   assert_redirected_to alignment_path(assigns(:alignment))
-    # end
-  
-    # test "should show alignment" do
-    #   get :show, id: @alignment
-    #   assert_response :success
-    # end
-  
-    # test "should get edit" do
-    #   get :edit, id: @alignment
-    #   assert_response :success
-    # end
-  
-    # test "should update alignment" do
-    #   put :update, id: @alignment, alignment: { description: @alignment.description, name: @alignment.name, url: @alignment.url }
-    #   assert_redirected_to alignment_path(assigns(:alignment))
-    # end
-  
-    # test "should destroy alignment" do
-    #   assert_difference('Alignment.count', -1) do
-    #     delete :destroy, id: @alignment
-    #   end
-  
-    #   assert_redirected_to alignments_path
-    # end
+    fixtures :all
+
+    setup do
+      @alignment = open_badges_alignments(:engin)
+    end
+
+    test "access for user who is not signed in" do
+      get :index
+      assert_response :redirect, "get index should not be allowed"
+      
+      get :new
+      assert_response :redirect, "get new should not be allowed"
+      
+      get :edit, id: @alignment
+      assert_response :redirect, "get edit should not be allowed"
+      
+      post :create
+      assert_response :redirect, "post create should not be allowed"
+      
+      put :update, id: @alignment
+      assert_response :redirect, "put update should not be allowed"
+
+      assert_difference('Alignment.count', 0, "alignment deletion should not be allowed") do
+        delete :destroy, id: @alignment
+      end
+    end
+
+    test "access for user who is signed in" do
+      sign_in User.first
+
+      get :index
+      assert_response :success, "get index should be allowed"
+      
+      get :new
+      assert_response :success, "get new should be allowed"
+      
+      get :edit, id: @alignment
+      assert_response :success, "get edit should be allowed"
+      
+      post :create
+      assert_response :success, "post create should be allowed"
+      
+      put :update, id: @alignment
+      assert_redirected_to alignments_path, "put update should be allowed"
+
+      assert_difference('Alignment.count', -1, "alignment deletion should be allowed") do
+        delete :destroy, id: @alignment
+      end
+      assert_redirected_to alignments_path, "should redirect to alignment page after deletion"
+    end
   end
 end

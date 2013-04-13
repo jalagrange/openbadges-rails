@@ -3,26 +3,27 @@ require 'securerandom'
 
 module OpenBadges
   class Assertion < ActiveRecord::Base
+    include AttachmentHelper
+
+    OPENBADGES_METADATA_KEY = 'openbadges'
+
     belongs_to :badge
 
-    validates :badge_id, presence: true
-    validates :verification_type, presence: true
+    validates :badge_id, :verification_type, presence: true
     validates :identity, :identity_hashed, :identity_type, presence: true
 
     validates :badge, :presence => { message: "does not exists" }
+    validates_uniqueness_of :user_id, :scope => :badge_id, message: "assertion exists"
+
+    has_attached_file :image, :url => ATTACHMENT_URL,
+      :default_url => MISSING_IMAGE_URL
     
-    attr_accessible :user_ids
-    attr_accessible :badge_id, :evidence, :expires, :image
+    attr_accessible :image, :user_id, :badge_id, :evidence, :expires
     attr_accessible :identity, :identity_hashed, :identity_salt, :identity_type
     attr_accessible :verification_type
 
-    # class << self
-    #   def associate_user_class(user_class)
-    #     belongs_to :user, :class_name => user_class.to_s, :foreign_key => 'user_id'
-    #   end
-    # end
-
     after_initialize :assign_defaults
+    after_save :bake_image
 
     private
     def assign_defaults
@@ -36,6 +37,17 @@ module OpenBadges
       end
     end
 
+    def bake_image
+      if self.image?
+        png = ChunkyPNG::Image.from_file(self.image.path)
+
+        if !png.metadata.has_key? OPENBADGES_METADATA_KEY
+            png.metadata[OPENBADGES_METADATA_KEY] = self.url
+            png.save(self.image.path)
+        end
+      end
+    end
+
     public
     def url
       OpenBadges::Engine.routes.url_helpers.assertion_url({
@@ -45,7 +57,6 @@ module OpenBadges
       })
     end
 
-    public
     def as_json(options = nil)
       json = super( :only => [] )
 
@@ -58,7 +69,7 @@ module OpenBadges
         :badge => {
           :name => self.badge.name,
           :version => '0.5.0',
-          :image => self.badge.image_url,
+          :image => (self.image.url(:original, false) unless !self.image?),
           :description => self.badge.description,
           :issuer => {
             :org => @organization.name,
@@ -68,7 +79,6 @@ module OpenBadges
           }
         }
       })
-      json[:image] = self.image unless self.image.nil? || self.image.empty?
       json[:evidence] = self.evidence unless self.evidence.nil? || self.evidence.empty?
       json[:expires] = self.expires.to_date unless self.expires.nil?
 
@@ -92,9 +102,9 @@ module OpenBadges
     #     :verify => {
     #       :url => self.url,
     #       :type => self.verification_type
-    #     }
+    #     },
+    #     :image => (self.image_url unless !self.image?)
     #   })
-    #   json[:image] = self.image unless self.image.nil? || self.image.empty?
     #   json[:evidence] = self.evidence unless self.evidence.nil? || self.evidence.empty?
     #   json[:expires] = self.expires.to_i unless self.expires.nil?
     #   json

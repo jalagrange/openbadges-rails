@@ -1,13 +1,13 @@
 <h1>Listing alignments</h1>
 
-<table class="table table-hover">
+<table class="table table-hover listing-table">
 
 <% @alignments.each do |alignment| %>
   <tr>
     <td>
-      <h4 class="badge-name"><%= alignment.name %></h4>
-      <p class="badge-description"><%= alignment.url %><p>
-      <p class="badge-description"><%= alignment.description %><p>
+      <h4 class="name"><%= alignment.name %></h4>
+      <p class="description"><%= alignment.url %><p>
+      <p class="description"><%= alignment.description %><p>
     </td>
     <td class= 'badge-options-column'>
       <%= link_to 'Edit', edit_alignment_path(alignment) %>

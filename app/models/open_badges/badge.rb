@@ -1,23 +1,18 @@
 module OpenBadges
   class Badge < ActiveRecord::Base
+    include AttachmentHelper
+
     has_many :badge_tags, dependent: :destroy
     has_many :tags, through: :badge_tags
     has_many :badge_alignments, dependent: :destroy
     has_many :alignments, through: :badge_alignments
+    has_many :assertions, dependent: :destroy
+    has_attached_file :image, :url => ATTACHMENT_URL,
+      :default_url => MISSING_IMAGE_URL
 
     attr_accessible :criteria, :description, :image, :name, :tag_ids, :alignment_ids
 
-    Paperclip.interpolates :mount_path do |attachment, style|
-      OpenBadges::Engine.routes.url_helpers.root_path
-    end
-
-    Paperclip.interpolates :class_without_namespace do |attachment, style|
-        attachment.instance.class.name.split('::').last.downcase.pluralize
-    end
-
-    has_attached_file :image, :url => ":mount_path:class_without_namespace/:attachment/:id.:extension"
     validates :image, attachment_presence: true
-
     validates :name, presence: true
     validates :name, uniqueness: true
 
@@ -66,22 +61,13 @@ module OpenBadges
       })
     end
 
-    public
-    def image_url
-      #Rails.application.routes.url_helpers.root_url({
-      #  :host => Rails.application.config.default_url_options[:host]
-      #}).gsub(/\/$/, '') + image.url(:original, false)
-      image.url(:original, false)
-    end
-
-    public
     def as_json(options = nil)
       json = super(
         :methods => [:badge_tags, :badge_alignments],
         :only => [:name, :criteria, :badge_tags, :badge_alignments, :description]
       ).reject{ |key, value| value.nil? || value.empty? }
       json.merge!({
-        :image => self.image_url
+        :image => (self.image.url(:original, false) unless !self.image?)
         })
       json['tags'] = json.delete(:badge_tags) unless json[:badge_tags].nil?
       json['alignment'] = json.delete(:badge_alignments) unless json[:badge_alignments].nil?

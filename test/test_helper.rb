@@ -14,11 +14,6 @@ if ActiveSupport::TestCase.method_defined?(:fixture_path=)
   ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures/", __FILE__)
 end
 
-# Load all fixtures by default
-class ActiveSupport::TestCase
-  fixtures :all
-end
-
 # Refer to https://github.com/rails/rails/issues/4971
 module OpenBadges
   class ActionController::TestCase
@@ -27,3 +22,10 @@ module OpenBadges
     end
   end
 end
+
+class ActionController::TestCase
+  include Devise::TestHelpers
+end
+
+# Declare constants to be used in tests
+SMILEY_IMAGE_PATH = File.join(Rails.root, "/app/assets/Smiley_face.png")

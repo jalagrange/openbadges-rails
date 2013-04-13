@@ -3,9 +3,11 @@ class CreateOpenBadgesOrganizations < ActiveRecord::Migration
     create_table :open_badges_organizations do |t|
       t.string :url
       t.string :name
-      t.string :image
+      # t.string :image
       t.string :email
       t.string :description
+
+      t.attachment :image
 
       t.timestamps
     end

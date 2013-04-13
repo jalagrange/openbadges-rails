@@ -2,6 +2,8 @@ require 'test_helper'
 
 module OpenBadges
   class BadgeTest < ActiveSupport::TestCase
+    fixtures :all
+    include AttachmentHelper
 
     setup do
       @android_badge = open_badges_badges(:android)
@@ -21,18 +23,15 @@ module OpenBadges
     end
 
     test "paperclip attachment and removal" do
-      missing_path = "/images/original/missing.png"
-      image_path = File.join(Rails.root, "/app/assets/Smiley_face.jpg")
 
       # Start by asserting image is empty
-      assert_equal missing_path, @android_badge.image.url(), "Image not empty"
+      assert_equal MISSING_IMAGE_URL, @android_badge.image.url(), "Image not empty"
 
       # Attach an image
-      image = File.open(image_path)
-      @android_badge.update_attributes(:image => image)
+      @android_badge.update_attributes(:image => File.open(SMILEY_IMAGE_PATH))
 
       # Assert image is no longer missing
-      assert_not_equal missing_path, @android_badge.image.url(), "Image file not attached"
+      assert_not_equal MISSING_IMAGE_URL, @android_badge.image.url(), "Image file not attached"
 
       # Remove uploaded file
       @android_badge.destroy
@@ -54,6 +53,12 @@ module OpenBadges
     test "destroys all associated badge_alignment when badge is destroyed" do
       assert_difference 'BadgeAlignment.count', -2 do
         @ios_badge.destroy
+      end
+    end
+
+    test "destroys all associated assertions when badge is destroyed" do
+      assert_difference 'Assertion.count', -1 do
+        @android_badge.destroy
       end
     end
   end

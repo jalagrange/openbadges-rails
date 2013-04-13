@@ -2,6 +2,8 @@ require 'test_helper'
 
 module OpenBadges
   class AlignmentTest < ActiveSupport::TestCase
+    fixtures :all
+    
     setup do
       @engin_alignment = open_badges_alignments(:engin)
     end

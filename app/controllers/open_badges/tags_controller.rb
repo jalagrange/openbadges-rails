@@ -7,6 +7,11 @@ module OpenBadges
     # GET /tags
     def index
       @tags = Tag.all
+
+      # OpenBadges::issue(2, "a@b.c", 2, true, {
+      #   issued_on: DateTime.new(2025, 3, 29),
+      #   evidence: "Some Evidence",
+      #   expires: DateTime.new(2025, 3, 29)})
   
       respond_to do |format|
         format.html # index.html.erb
