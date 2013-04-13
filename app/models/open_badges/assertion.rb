@@ -69,7 +69,7 @@ module OpenBadges
         :badge => {
           :name => self.badge.name,
           :version => '0.5.0',
-          :image => (self.image.url(:original, false) unless !self.image?),
+          :image => (self.badge.image.url(:original, false) unless !self.image?),
           :description => self.badge.description,
           :issuer => {
             :org => @organization.name,
