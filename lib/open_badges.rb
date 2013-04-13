@@ -52,6 +52,7 @@ module OpenBadges
         evidence: params[:evidence],
         expires: params[:expires])
       assertion.created_at = params[:issued_on]
+      assertion.setIdentity user_email
 
       if assertion.valid?
         if bake_badge
@@ -73,10 +74,6 @@ module OpenBadges
       Rails.logger.info("result: " + result.to_s)
 
       return result
-    end
-
-    def issueToMozillaBackpack(user_id, user_email, badge_id, params = {})
-
     end
   end
 end
