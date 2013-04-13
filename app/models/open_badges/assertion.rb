@@ -5,6 +5,8 @@ module OpenBadges
   class Assertion < ActiveRecord::Base
     include AttachmentHelper
 
+    OPENBADGES_METADATA_KEY = 'openbadges'
+
     belongs_to :badge
 
     validates :badge_id, :verification_type, presence: true
@@ -23,12 +25,6 @@ module OpenBadges
     after_initialize :assign_defaults
     after_save :bake_image
 
-    @@OPENBADGES_METADATA_KEY = 'openbadges'
-
-    def Assertion.OPENBADGES_METADATA_KEY
-      @@OPENBADGES_METADATA_KEY
-    end
-
     private
     def assign_defaults
       if new_record?
@@ -45,8 +41,8 @@ module OpenBadges
       if self.image?
         png = ChunkyPNG::Image.from_file(self.image.path)
 
-        if !png.metadata.has_key? @@OPENBADGES_METADATA_KEY
-            png.metadata[@@OPENBADGES_METADATA_KEY] = self.url
+        if !png.metadata.has_key? OPENBADGES_METADATA_KEY
+            png.metadata[OPENBADGES_METADATA_KEY] = self.url
             png.save(self.image.path)
         end
       end

@@ -35,7 +35,7 @@ module OpenBadges
       assert assertion.image, 'baked image does not exist'
 
       baked_image = ChunkyPNG::Image.from_file(assertion.image.path)
-      assert (baked_image.metadata.has_key? Assertion.OPENBADGES_METADATA_KEY),
+      assert (baked_image.metadata.has_key? Assertion::OPENBADGES_METADATA_KEY),
         "Image not baked"
     end
 
