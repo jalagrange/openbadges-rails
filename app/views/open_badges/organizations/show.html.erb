@@ -1,53 +1,41 @@
-<form method="post" enctype="multipart/form-data">
+<%= form_for @organization, :html => { :multipart => true } do |f| %>
   <legend>Issuer Organization Details</legend>
 
-  <div class= "badge-edit-image" id="image">
-    <label for="image">Image (optional)</label>
-    <%= image_tag @organization.image.url, class: 'badge-image'%>
-    <input type="file" name="organization[image]">
-    <span class="help-block">
-      An image representing the organization.
-    </span>
+  <div class= "edit-image">
+    <%= label_tag "Image (optional)" %>
+    <%= image_tag @organization.image.url %>
+    <%= f.file_field :image %>
   </div>
 
-  <div>
-    <label for="name">Name</label>
-    <input type="text"
-           id="name"
-           class="input-xlarge"
-           name="organization[name]"
-           placeholder="Example Inc."
-           maxlength="128"
-           value="<%= @organization.name %>"
-           required>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name,
+      :class => "input-xlarge",
+      :required => "",
+      :placeholder => "http://example.org" %>
     <span class="help-block">
       Name of the issuer. This should be the top-level name of your
       institution, e.g. "Mozilla".
     </span>
   </div>
 
-  <div>
-    <label for="url">Website</label>
-    <input type="url"
-           id="url"
-           class="input-xlarge"
-           name="organization[url]"
-           value="<%= @organization.url %>"
-           placeholder="http://example.org"
-           required>
+  <div class="field">
+    <%= f.label :url %>
+    <%= f.url_field :url,
+      :class => "input-xlarge",
+      :required => "",
+      :placeholder => "admin@example.org" %>
     <span class="help-block">
       Website of the organization.
     </span>
   </div>
 
-  <div>
-    <label for="email">Email (optional)</label>
-    <input type="email"
-           id="email"
-           class="input-xlarge"
-           name="organization[email]"
-           value="<%= @organization.email %>"
-           placeholder="admin@example.org">
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email,
+      :class => "input-xlarge",
+      :required => "",
+      :placeholder => "admin@example.org"%>
     <span class="help-block">
       Contact at your organization for any badge-related issues. It's
       probably best to make this email something that won't change, so
@@ -55,23 +43,20 @@
       instead.
     </span>
   </div>
-  
-  <div>
-    <label for="description">Description (optional)</label>
-    <textarea
-           id="description"
-           maxlength="256"
-           class="input-xxlarge"
-           name="organization[description]"
-           placeholder="Lorem ipsum dolor sit amet, consectetur adipisicing elit..."
-    ><%= @organization.description %></textarea>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description,
+      :rows => 3,
+      :class => "input-xxlarge",
+      :placeholder => "Lorem ipsum dolor sit amet, consectetur adipisicing elit..."%>
     <span class="help-block">
       A short description of the organization for your issuer.
     </span>
   </div>
 
   <div class="form-actions">
-    <button id="save-issuer" type="submit" class="btn btn-primary">Save Configuration</button>
+    <%= f.submit :class => "btn btn-primary" %>
   </div>
 
-</form>
+<% end %>

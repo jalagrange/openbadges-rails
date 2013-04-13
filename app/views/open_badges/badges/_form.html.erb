@@ -7,9 +7,9 @@
     <div class="alert alert-error">Badge image is missing!</div>
   <% end %>
 
-  <div class= "badge-edit-image">
+  <div class= "edit-image">
     <%= f.label :image %>
-    <%= image_tag @badge.image.url, class: 'badge-image'%>
+    <%= image_tag @badge.image.url %>
     <%= f.file_field :image %>
   </div>
 
