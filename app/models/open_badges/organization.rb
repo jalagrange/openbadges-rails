@@ -1,17 +1,15 @@
 module OpenBadges
   class Organization < ActiveRecord::Base
+    include AttachmentHelper
+
     attr_accessible :description, :email, :image, :name, :url
 
     validates :url, :name, presence: true
 
-    has_attached_file :image, :url => "/:class/:attachment/:id_:filename",
-      :default_url => "/open_badges/missing.png"
+    has_attached_file :image, :url => ATTACHMENT_URL,
+      :default_url => MISSING_IMAGE_URL
 
     public
-    def image_url
-      Rails.application.config.default_url_options[:host] + image.url
-    end
-
     def as_json(options = nil)
       json = super(
         :only => [:url, :name, :email, :description]
