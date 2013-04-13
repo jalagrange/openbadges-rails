@@ -28,7 +28,6 @@ module OpenBadges
     private
     def assign_defaults
       if new_record?
-        self.identity = 'sha256$'
         self.identity_hashed = true
         self.identity_type = 'email'
         self.identity_salt = SecureRandom.urlsafe_base64(16)
@@ -49,6 +48,10 @@ module OpenBadges
     end
 
     public
+    def setIdentity email
+      self.identity = 'sha256$' + Digest::SHA256.hexdigest(email + identity_salt)
+    end
+
     def url
       OpenBadges::Engine.routes.url_helpers.assertion_url({
         :id => self.id,
