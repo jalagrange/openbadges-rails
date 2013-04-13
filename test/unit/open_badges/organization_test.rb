@@ -3,11 +3,10 @@ require 'test_helper'
 module OpenBadges
   class OrganizationTest < ActiveSupport::TestCase
     fixtures :all
+    include AttachmentHelper
 
     setup do
       @organization = open_badges_organizations(:smart)
-      @missing_path = "/open_badges/missing.png"
-      @image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
     end
 
     test "organization attributes must not be empty" do
@@ -20,13 +19,13 @@ module OpenBadges
     test "paperclip attachment and removal" do
 
       # Start by asserting image is empty
-      assert_equal @missing_path, @organization.image.url(), "Image not empty"
+      assert_equal MISSING_IMAGE_URL, @organization.image.url(), "Image not empty"
 
       # Attach an image
-      @organization.update_attributes(:image => File.open(@image_path))
+      @organization.update_attributes(:image => File.open(SMILEY_IMAGE_PATH))
 
       # Assert image is no longer missing
-      assert_not_equal @missing_path, @organization.image.url(), "Image file not attached"
+      assert_not_equal MISSING_IMAGE_URL, @organization.image.url(), "Image file not attached"
 
       # Remove uploaded file
       @organization.destroy

@@ -3,12 +3,11 @@ require 'test_helper'
 module OpenBadges
   class BadgeTest < ActiveSupport::TestCase
     fixtures :all
+    include AttachmentHelper
 
     setup do
       @android_badge = open_badges_badges(:android)
       @ios_badge = open_badges_badges(:ios)
-      @missing_path = "/open_badges/missing.png"
-      @image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
     end
     
     test "badge attributes must not be empty" do
@@ -26,13 +25,13 @@ module OpenBadges
     test "paperclip attachment and removal" do
 
       # Start by asserting image is empty
-      assert_equal @missing_path, @android_badge.image.url(), "Image not empty"
+      assert_equal MISSING_IMAGE_URL, @android_badge.image.url(), "Image not empty"
 
       # Attach an image
-      @android_badge.update_attributes(:image => File.open(@image_path))
+      @android_badge.update_attributes(:image => File.open(SMILEY_IMAGE_PATH))
 
       # Assert image is no longer missing
-      assert_not_equal @missing_path, @android_badge.image.url(), "Image file not attached"
+      assert_not_equal MISSING_IMAGE_URL, @android_badge.image.url(), "Image file not attached"
 
       # Remove uploaded file
       @android_badge.destroy

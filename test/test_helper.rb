@@ -26,3 +26,6 @@ end
 class ActionController::TestCase
   include Devise::TestHelpers
 end
+
+# Declare constants to be used in tests
+SMILEY_IMAGE_PATH = File.join(Rails.root, "/app/assets/Smiley_face.png")

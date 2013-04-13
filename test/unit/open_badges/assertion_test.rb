@@ -4,12 +4,11 @@ require 'date'
 module OpenBadges
   class AssertionTest < ActiveSupport::TestCase
     fixtures :all
+    include AttachmentHelper
 
     setup do
       @android_badge = open_badges_badges(:android)
       @android_assertion = open_badges_assertions(:androidAssertion)
-      @missing_path = "/open_badges/missing.png"
-      @image_path = File.join(Rails.root, "/app/assets/Smiley_face.png")
     end
 
     test "assertion attributes must not be emtpy" do
@@ -33,14 +32,14 @@ module OpenBadges
     test "paperclip attachment and removal" do
 
       # Start by asserting image is empty
-      assert_equal @missing_path, @android_assertion.image.url(), "Image not empty"
+      assert_equal MISSING_IMAGE_URL, @android_assertion.image.url(), "Image not empty"
 
       # Attach an image
-      image = File.open(@image_path)
+      image = File.open(SMILEY_IMAGE_PATH)
       @android_assertion.update_attributes(:image => image)
 
       # Assert image is no longer missing
-      assert_not_equal @missing_path, @android_assertion.image.url(), "Image file not attached"
+      assert_not_equal MISSING_IMAGE_URL, @android_assertion.image.url(), "Image file not attached"
 
       # Remove uploaded file
       @android_assertion.destroy
@@ -49,17 +48,17 @@ module OpenBadges
     test "attached image is baked" do
 
       # Start by asserting image is empty
-      assert_equal @missing_path, @android_assertion.image.url(), "Image not empty"
+      assert_equal MISSING_IMAGE_URL, @android_assertion.image.url(), "Image not empty"
 
       # Attach an image
-      image = File.open(@image_path)
+      image = File.open(SMILEY_IMAGE_PATH)
       @android_assertion.update_attributes(:image => image)
 
       # Assert image is no longer missing
-      assert_not_equal @missing_path, @android_assertion.image.url(), "Image file not attached"
+      assert_not_equal MISSING_IMAGE_URL, @android_assertion.image.url(), "Image file not attached"
 
       png = ChunkyPNG::Image.from_file(@android_assertion.image.path)
-      assert (png.metadata.has_key? OpenBadges::Assertion.OPENBADGES_METADATA_KEY), "Image not baked"
+      assert (png.metadata.has_key? Assertion::OPENBADGES_METADATA_KEY), "Image not baked"
 
       # Remove uploaded file
       @android_assertion.destroy
