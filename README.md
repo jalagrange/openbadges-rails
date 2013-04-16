@@ -37,18 +37,21 @@ https://github.com/mozilla/openbadges/wiki/Issuer-API
 
 ## Development
 
-Run migrations
+### Getting started
+
+Setup database and run dummy application
 ```sh
-cd test/dummy
-dummy> rake openbadges:install:migrations
-dummy> rake db:migrate
+openbadges-rails> rake db:migrate
+openbadges-rails> rake db:seed
+openbadges-rails> cd test/dummy
+dummy> rails s
 ```
 
-Seed db with data
+Login to OpenBadges panel with seeded admin account
 ```sh
-dummy> rake db:seed
+username: admin@openbadges.org
+password: openbadges
 ```
-
 
 ### Running tests
     openbadges-rails> rake test              // Run all tests
