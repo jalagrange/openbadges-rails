@@ -60,6 +60,7 @@ module OpenBadges
       })
     end
 
+    # Assertion v0.5.0
     def as_json(options = nil)
       json = super( :only => [] )
 
@@ -89,6 +90,7 @@ module OpenBadges
       json
     end
 
+    # New Assertion Specifications
     # public
     # def as_json(options = nil)
     #   json = super( :only => [] )

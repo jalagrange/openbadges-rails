@@ -3,7 +3,6 @@ class CreateOpenBadgesAssertions < ActiveRecord::Migration
     create_table :open_badges_assertions do |t|
       t.integer :user_id
       t.integer :badge_id
-      # t.string :image
       t.string :evidence
       t.datetime :expires
       t.text :identity

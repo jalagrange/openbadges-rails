@@ -35,6 +35,11 @@ https://github.com/mozilla/openbadges/wiki/Issuer-API
 <%= javascript_include_tag "http://beta.openbadges.org/issuer.js" %>
 ```
 
+Include a link for admins to access the OpenBadges panel
+```sh
+<%= link_to "OpenBadges", open_badges_path %>
+```
+
 ## Development
 
 ### Getting started
