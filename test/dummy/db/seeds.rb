@@ -30,12 +30,12 @@ OpenBadges::Badge.create(
   criteria: 'http://criteria.fireball.com',
   description: 'Vibrate gas molecules violently within a confined space to create a ball of fire')
 
-# 100.times do |i|
-#   OpenBadges::Badge.create(
-#   name: "Teleport - #{i}",
-#   # image: 'http://localhost:3000/assets/teleport.png',
-#   description: 'Manipulate space time to instantaneously travel from one location to another')
-# end
+20.times do |i|
+  OpenBadges::Badge.create(
+  name: "Teleport - #{i}",
+  image: File.open(File.join(image_path, 'teleport.png')),
+  description: 'Manipulate space time to instantaneously travel from one location to another')
+end
 
 OpenBadges::Tag.create(
   id: 1,
