@@ -4,8 +4,23 @@ module OpenBadges
   class OrganizationsController < ApplicationController
     load_and_authorize_resource :class => 'OpenBadges::Organization'
 
-    # GET /organization
-    def show
+    # POST /organizations
+    def create
+      @organization = Organization.new(params[:organization])
+  
+      respond_to do |format|
+        if @organization.save
+          format.html { redirect_to organizations_path,
+            :flash => { :success => 'Organization was successfully updated.' } }
+        else
+          format.html { redirect_to organizations_path,
+            :flash => { :error => @organization.errors.full_messages } }
+        end
+      end
+    end
+
+    # GET /organizations
+    def index
       @organization = Organization.first || Organization.new
 
       respond_to do |format|
@@ -14,15 +29,17 @@ module OpenBadges
       end
     end
 
-    # POST /organization
-    def create
+    # PUT /organizations
+    def update
       @organization = Organization.first || Organization.create
 
       respond_to do |format|
         if @organization.update_attributes(params[:organization])
-          format.html { redirect_to organization_path, :flash => { :success => 'Organization was successfully updated.' } }
+          format.html { redirect_to organizations_path,
+            :flash => { :success => 'Organization was successfully updated.' } }
         else
-          format.html { redirect_to organization_path, :flash => { :error => @organization.errors.full_messages } }
+          format.html { redirect_to organizations_path,
+            :flash => { :error => @organization.errors.full_messages } }
         end
       end
     end

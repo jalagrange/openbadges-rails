@@ -10,8 +10,6 @@ OpenBadges::Engine.routes.draw do
 
   resources :assertions
 
-  resources :organizations, :only => []
-  get "organization" => "organizations#show"
-  post "organization" => "organizations#create"
+  resources :organizations, :only => [:index, :create, :update]
 
 end
